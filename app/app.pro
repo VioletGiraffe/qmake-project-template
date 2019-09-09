@@ -8,6 +8,7 @@ TARGET   = NewAwesomeApplication
 #QT = core gui widgets network
 #win*:QT += winextras
 CONFIG -= qt
+CONFIG += console
 
 CONFIG += strict_c++ c++17
 
