@@ -25,6 +25,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+.qtc_clangd/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
