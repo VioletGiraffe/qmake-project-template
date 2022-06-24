@@ -10,9 +10,9 @@ TARGET   = NewAwesomeApplication
 CONFIG -= qt
 CONFIG += console
 
-CONFIG += strict_c++ c++17
+CONFIG += strict_c++ c++2a
 
-mac* | linux* | freebsd{
+mac* | linux* | freebsd {
 	CONFIG(release, debug|release):CONFIG *= Release optimize_full
 	CONFIG(debug, debug|release):CONFIG *= Debug
 }
@@ -26,11 +26,9 @@ contains(QT_ARCH, x86_64) {
 android {
 	Release:OUTPUT_DIR=android/release
 	Debug:OUTPUT_DIR=android/debug
-
 } else:ios {
 	Release:OUTPUT_DIR=ios/release
 	Debug:OUTPUT_DIR=ios/debug
-
 } else {
 	Release:OUTPUT_DIR=release/$${ARCHITECTURE}
 	Debug:OUTPUT_DIR=debug/$${ARCHITECTURE}
@@ -75,12 +73,15 @@ mac*|linux*|freebsd{
 
 win*{
 	#LIBS += -lole32 -lShell32 -lUser32
-	QMAKE_CXXFLAGS += /MP /Zi /wd4251
-	QMAKE_CXXFLAGS += /std:c++17 /permissive- /Zc:__cplusplus
+	QMAKE_CXXFLAGS += /MP /wd4251
+	QMAKE_CXXFLAGS += /std:c++latest /permissive- /Zc:__cplusplus
 	QMAKE_CXXFLAGS_WARN_ON = /W4
 	DEFINES += WIN32_LEAN_AND_MEAN NOMINMAX _SCL_SECURE_NO_WARNINGS
 
-	!*msvc2013*:QMAKE_LFLAGS += /DEBUG:FASTLINK
+	Debug:QMAKE_CXXFLAGS   += /ZI
+	Release:QMAKE_CXXFLAGS += /Zi
+
+	QMAKE_LFLAGS += /DEBUG:FASTLINK /TIME
 
 	Debug:QMAKE_LFLAGS += /INCREMENTAL
 	Release:QMAKE_LFLAGS += /OPT:REF /OPT:ICF
@@ -96,8 +97,8 @@ mac*{
 #      Generic stuff for Linux and Mac
 ###################################################
 
-linux*|mac*|freebsd{
-	QMAKE_CXXFLAGS_WARN_ON = -Wall -Wno-c++11-extensions -Wno-local-type-template-args -Wno-deprecated-register
+linux*|mac*|freebsd {
+	QMAKE_CXXFLAGS_WARN_ON = -Wall
 
 	Release:DEFINES += NDEBUG=1
 	Debug:DEFINES += _DEBUG
