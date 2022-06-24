@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-11, windows-2019]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
     - name: Checkout
@@ -38,10 +38,9 @@ jobs:
       shell: cmd
       run: |
         %Qt5_DIR%\bin\qmake.exe -v
-        dir "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC"
-        call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+        call "%programfiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
         %Qt5_DIR%\bin\qmake.exe -tp vc -r
-        msbuild /t:Build /p:Configuration=Release;PlatformToolset=v142
+        msbuild /t:Build /p:Configuration=Release;PlatformToolset=v143
 
     - name: Mac
       if: startsWith(matrix.os, 'macos')
@@ -55,9 +54,9 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        sudo apt update -y; sudo apt install -qq gcc-10 g++-10
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 50
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 50
+        sudo apt update -y; sudo apt install -qq gcc-11 g++-11
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 50
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 50
         g++ --version
 
         $Qt5_DIR/bin/qmake -r
@@ -74,3 +73,4 @@ jobs:
     # - name: Test run
     #   if: startsWith(matrix.os, 'widows')
     #   run: ./tests/bin/tests.exe
+    
