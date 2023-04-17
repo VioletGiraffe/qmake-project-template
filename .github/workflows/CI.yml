@@ -27,11 +27,11 @@ jobs:
         submodules: 'recursive'
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
 
     - name: Windows - setup MSBuild
       if: startsWith(matrix.os, 'windows')
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v1.3
 
     - name: Windows
       if: startsWith(matrix.os, 'windows')
@@ -54,9 +54,9 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        sudo apt update -y; sudo apt install -qq gcc-11 g++-11
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 50
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 50
+        sudo apt update -y; sudo apt install -qq gcc-12 g++-12
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 50
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 50
         g++ --version
 
         $Qt5_DIR/bin/qmake -r
