@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET   = NewAwesomeApplication
 
 #QT = core gui widgets network
-#win*:QT += winextras
+#win*:QT += winextras #Qt5 only
 CONFIG -= qt
 CONFIG += console
 
@@ -17,22 +17,8 @@ mac* | linux* | freebsd {
 	CONFIG(debug, debug|release):CONFIG *= Debug
 }
 
-contains(QT_ARCH, x86_64) {
-	ARCHITECTURE = x64
-} else {
-	ARCHITECTURE = x86
-}
-
-android {
-	Release:OUTPUT_DIR=android/release
-	Debug:OUTPUT_DIR=android/debug
-} else:ios {
-	Release:OUTPUT_DIR=ios/release
-	Debug:OUTPUT_DIR=ios/debug
-} else {
-	Release:OUTPUT_DIR=release/$${ARCHITECTURE}
-	Debug:OUTPUT_DIR=debug/$${ARCHITECTURE}
-}
+Release:OUTPUT_DIR=release/
+Debug:OUTPUT_DIR=debug/
 
 DESTDIR  = ../bin/$${OUTPUT_DIR}
 OBJECTS_DIR = ../build/$${OUTPUT_DIR}/$${TARGET}
@@ -60,10 +46,9 @@ SOURCES += \
 #                 LIBS
 ###################################################
 
+LIBS += -L$${DESTDIR} -lcpputils
 
-LIBS += -L../bin/$${OUTPUT_DIR} -lcpputils
-
-mac*|linux*|freebsd{
+mac*|linux*|freebsd*{
 	PRE_TARGETDEPS += $${DESTDIR}/libcpputils.a
 }
 
@@ -74,12 +59,9 @@ mac*|linux*|freebsd{
 win*{
 	#LIBS += -lole32 -lShell32 -lUser32
 	QMAKE_CXXFLAGS += /MP /wd4251
-	QMAKE_CXXFLAGS += /std:c++latest /permissive- /Zc:__cplusplus
+	QMAKE_CXXFLAGS += /std:c++latest /permissive- /Zc:__cplusplus /FS
 	QMAKE_CXXFLAGS_WARN_ON = /W4
 	DEFINES += WIN32_LEAN_AND_MEAN NOMINMAX _SCL_SECURE_NO_WARNINGS
-
-	QMAKE_CXXFLAGS_DEBUG -= -Zi
-	QMAKE_CXXFLAGS_DEBUG *= -ZI
 
 	QMAKE_LFLAGS += /DEBUG:FASTLINK /TIME
 
@@ -90,7 +72,7 @@ win*{
 mac*{
 	LIBS += -framework AppKit
 
-	QMAKE_POST_LINK = cp -f -p $$PWD/$$DESTDIR/*.dylib $$PWD/$$DESTDIR/$${TARGET}.app/Contents/MacOS/ || true
+	QMAKE_POST_LINK = cp -f -p $${DESTDIR}/*.dylib $${DESTDIR}/$${TARGET}.app/Contents/MacOS/ || true
 }
 
 ###################################################
@@ -98,12 +80,8 @@ mac*{
 ###################################################
 
 linux*|mac*|freebsd {
-	QMAKE_CXXFLAGS_WARN_ON = -Wall
+	QMAKE_CXXFLAGS_WARN_ON = -Wall -Wextra
 
 	Release:DEFINES += NDEBUG=1
 	Debug:DEFINES += _DEBUG
-}
-
-win32*:!*msvc2012:*msvc* {
-	QMAKE_CXXFLAGS += /FS
 }
