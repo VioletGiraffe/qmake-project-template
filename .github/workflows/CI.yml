@@ -22,24 +22,24 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: 'recursive'
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
 
     - name: Windows - setup MSBuild
       if: startsWith(matrix.os, 'windows')
-      uses: microsoft/setup-msbuild@v1.3
+      uses: microsoft/setup-msbuild@v2
 
     - name: Windows
       if: startsWith(matrix.os, 'windows')
       shell: cmd
       run: |
-        %Qt5_DIR%\bin\qmake.exe -v
+        %QT_ROOT_DIR%\bin\qmake.exe -v
         call "%programfiles%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-        %Qt5_DIR%\bin\qmake.exe -tp vc -r
+        %QT_ROOT_DIR%\bin\qmake.exe -tp vc -r
         msbuild /t:Build /p:Configuration=Release;PlatformToolset=v143
 
     - name: Mac
@@ -47,7 +47,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         clang --version
-        $Qt5_DIR/bin/qmake -r
+        $QT_ROOT_DIR/bin/qmake -r
         make -j
 
     - name: Linux
@@ -59,7 +59,7 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 50
         g++ --version
 
-        $Qt5_DIR/bin/qmake -r
+        $QT_ROOT_DIR/bin/qmake -r
         make -j
 
     # - name: Test run
