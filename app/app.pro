@@ -5,12 +5,11 @@
 TEMPLATE = app
 TARGET   = NewAwesomeApplication
 
-#QT = core gui widgets network
-#win*:QT += winextras #Qt5 only
+#QT = core gui widgets network qt5compat
 CONFIG -= qt
 CONFIG += console
 
-CONFIG += strict_c++ c++2a
+CONFIG += strict_c++ c++2b
 
 mac* | linux* | freebsd {
 	CONFIG(release, debug|release):CONFIG *= Release optimize_full
