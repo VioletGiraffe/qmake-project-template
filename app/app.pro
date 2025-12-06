@@ -9,7 +9,7 @@ TARGET   = NewAwesomeApplication
 CONFIG -= qt
 CONFIG += console
 
-CONFIG += strict_c++ c++2b
+CONFIG += strict_c++ c++latest
 
 mac* | linux* | freebsd {
 	CONFIG(release, debug|release):CONFIG *= Release optimize_full
@@ -84,3 +84,4 @@ linux*|mac*|freebsd {
 	Release:DEFINES += NDEBUG=1
 	Debug:DEFINES += _DEBUG
 }
+
