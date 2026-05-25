@@ -29,7 +29,9 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: 6.6.*
+        version: 6.9.*
+        cache: 'true'
+        target: desktop
 
     - name: Windows - setup MSBuild
       if: startsWith(matrix.os, 'windows')
@@ -56,9 +58,9 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        sudo apt update -y; sudo apt install -qq gcc-12 g++-12
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 50
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 50
+        sudo apt update -y; sudo apt install -qq gcc-14 g++-14
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 50
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 50
         g++ --version
 
         $QT_ROOT_DIR/bin/qmake -r
