@@ -25,4 +25,3 @@ Makefile.Release
 .qmake.stash
 
 .DS_Store
-/app/Darkroom_resource.rc
