@@ -18,7 +18,17 @@ linux*{
 }
 
 mac* | linux* | freebsd {
-	QMAKE_CXXFLAGS_WARN_ON = -Wall -Wextra
+	QMAKE_CXXFLAGS_WARN_ON += -Wall -Wextra -Wnon-virtual-dtor -Woverloaded-virtual -Wold-style-cast -Wcast-qual -Wdouble-promotion
+	QMAKE_CXXFLAGS_WARN_ON += -Wformat=2 -Wextra-semi -Wzero-as-null-pointer-constant -Wfloat-equal -Wredundant-decls
+
+	contains(QMAKE_COMPILER, clang) {
+		QMAKE_CXXFLAGS_WARN_ON += -Wshadow-all -Wcast-align -Wcomma -Wconditional-uninitialized -Wheader-hygiene -Wloop-analysis -Wextra-semi-stmt -Wunreachable-code-aggressive
+	} else {
+		QMAKE_CXXFLAGS_WARN_ON += -Wshadow -Wcast-align=strict -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wnull-dereference -Wsuggest-override
+	}
+
+	# Kept out of WARN_ON so that CONFIG+=warn_off cannot turn an error back into silence.
+	QMAKE_CXXFLAGS += -Werror=return-type
 
 	Release:DEFINES += NDEBUG=1
 	Debug:DEFINES += _DEBUG
@@ -27,9 +37,10 @@ mac* | linux* | freebsd {
 win*{
 	DEFINES += WIN32_LEAN_AND_MEAN NOMINMAX
 
-	QMAKE_CXXFLAGS_WARN_ON = /W4
+	QMAKE_CXXFLAGS_WARN_ON += /W4
 	QMAKE_CXXFLAGS += /MP /Zi /FS
 	QMAKE_CXXFLAGS += /std:c++latest /permissive- /Zc:__cplusplus
+	QMAKE_CXXFLAGS += /we4715 /we4716 # "not all control paths return a value", "must return a value"
 
 	Debug:QMAKE_CXXFLAGS += /JMC
 	Debug:QMAKE_LFLAGS += /DEBUG:FASTLINK /INCREMENTAL
