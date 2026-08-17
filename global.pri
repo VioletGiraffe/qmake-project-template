@@ -27,10 +27,11 @@ mac* | linux* | freebsd {
 
 	contains(QMAKE_COMPILER, clang) {
 		QMAKE_CXXFLAGS_WARN_ON += -Wshadow-all -Wcast-align -Wcomma -Wconditional-uninitialized -Wheader-hygiene -Wloop-analysis -Wextra-semi-stmt -Wunreachable-code-aggressive
-		QMAKE_CXXFLAGS_WARN_ON += -Wshorten-64-to-32
+		QMAKE_CXXFLAGS_WARN_ON += -Wshorten-64-to-32 -Wmissing-prototypes -Wmissing-variable-declarations -Wweak-vtables
 		QMAKE_CXXFLAGS += -Werror=return-stack-address -Werror=infinite-recursion
 	} else {
-		QMAKE_CXXFLAGS_WARN_ON += -Wshadow -Wcast-align=strict -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wnull-dereference -Wsuggest-override -Wnoexcept
+		QMAKE_CXXFLAGS_WARN_ON += -Wshadow -Wcast-align=strict -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wnull-dereference
+		QMAKE_CXXFLAGS_WARN_ON += -Wsuggest-override -Wnoexcept -Wmissing-declarations
 		QMAKE_CXXFLAGS += -Werror=return-local-addr -Werror=memset-transposed-args -Werror=nonnull-compare -Werror=mismatched-new-delete -Werror=infinite-recursion
 		QMAKE_CXXFLAGS += -Wcatch-value=3 -Werror=catch-value # -Werror=catch-value on its own would only enable level 1
 	}
