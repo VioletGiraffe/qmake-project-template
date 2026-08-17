@@ -9,12 +9,7 @@ TARGET   = NewAwesomeApplication
 CONFIG -= qt
 CONFIG += console
 
-CONFIG += strict_c++ c++latest
-
-mac* | linux* | freebsd {
-	CONFIG(release, debug|release):CONFIG *= Release optimize_full
-	CONFIG(debug, debug|release):CONFIG *= Debug
-}
+include(../global.pri)
 
 Release:OUTPUT_DIR=release/
 Debug:OUTPUT_DIR=debug/
@@ -57,31 +52,12 @@ mac*|linux*|freebsd*{
 
 win*{
 	#LIBS += -lole32 -lShell32 -lUser32
-	QMAKE_CXXFLAGS += /MP /wd4251
-	QMAKE_CXXFLAGS += /std:c++latest /permissive- /Zc:__cplusplus /FS
-	QMAKE_CXXFLAGS_WARN_ON = /W4
-	DEFINES += WIN32_LEAN_AND_MEAN NOMINMAX _SCL_SECURE_NO_WARNINGS
-
-	Debug:QMAKE_LFLAGS += /DEBUG:FASTLINK /INCREMENTAL
-
- 	Release:QMAKE_CXXFLAGS += /GL
-	Release:QMAKE_LFLAGS += /DEBUG:FULL /OPT:REF /OPT:ICF /TIME /LTCG:INCREMENTAL
+	QMAKE_CXXFLAGS += /wd4251
 }
 
 mac*{
 	LIBS += -framework AppKit
 
 	QMAKE_POST_LINK = cp -f -p $${DESTDIR}/*.dylib $${DESTDIR}/$${TARGET}.app/Contents/MacOS/ || true
-}
-
-###################################################
-#      Generic stuff for Linux and Mac
-###################################################
-
-linux*|mac*|freebsd {
-	QMAKE_CXXFLAGS_WARN_ON = -Wall -Wextra
-
-	Release:DEFINES += NDEBUG=1
-	Debug:DEFINES += _DEBUG
 }
 
