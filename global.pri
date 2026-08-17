@@ -19,7 +19,7 @@ linux*{
 
 mac* | linux* | freebsd {
 	QMAKE_CXXFLAGS_WARN_ON += -Wall -Wextra -Wnon-virtual-dtor -Woverloaded-virtual -Wold-style-cast -Wcast-qual -Wdouble-promotion
-	QMAKE_CXXFLAGS_WARN_ON += -Wformat=2 -Wextra-semi -Wzero-as-null-pointer-constant -Wfloat-equal -Wredundant-decls
+	QMAKE_CXXFLAGS_WARN_ON += -Wformat=2 -Wextra-semi -Wzero-as-null-pointer-constant -Wfloat-equal -Wredundant-decls -Wvla
 
 	# Error promotions are kept out of WARN_ON so that CONFIG+=warn_off cannot turn an error back into silence.
 	QMAKE_CXXFLAGS += -Werror=return-type -Werror=uninitialized -Werror=delete-non-virtual-dtor -Werror=address
@@ -29,8 +29,9 @@ mac* | linux* | freebsd {
 		QMAKE_CXXFLAGS_WARN_ON += -Wshadow-all -Wcast-align -Wcomma -Wconditional-uninitialized -Wheader-hygiene -Wloop-analysis -Wextra-semi-stmt -Wunreachable-code-aggressive
 		QMAKE_CXXFLAGS += -Werror=return-stack-address -Werror=infinite-recursion
 	} else {
-		QMAKE_CXXFLAGS_WARN_ON += -Wshadow -Wcast-align=strict -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wnull-dereference -Wsuggest-override
+		QMAKE_CXXFLAGS_WARN_ON += -Wshadow -Wcast-align=strict -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wuseless-cast -Wnull-dereference -Wsuggest-override -Wnoexcept
 		QMAKE_CXXFLAGS += -Werror=return-local-addr -Werror=memset-transposed-args -Werror=nonnull-compare -Werror=mismatched-new-delete -Werror=infinite-recursion
+		QMAKE_CXXFLAGS += -Wcatch-value=3 -Werror=catch-value # -Werror=catch-value on its own would only enable level 1
 	}
 
 	Release:DEFINES += NDEBUG=1
